@@ -1,3 +1,4 @@
+import { alias } from '@ember/object/computed';
 import { deprecate } from '@ember/application/deprecations';
 import {
   getWithDefault,
@@ -17,7 +18,7 @@ const ButtonComponent = Component.extend(positionalParamsMixin, {
   layout,
   tagName: 'button',
   textState: 'default',
-  asyncState: computed.alias('default'),
+  asyncState: alias('default'),
   reset: false,
   classNames: ['async-button'],
   classNameBindings: ['textState'],

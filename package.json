@@ -2,57 +2,58 @@
   "name": "ember-async-button",
   "version": "1.0.2",
   "description": "When running async actions ensuring disabling of the button, re-enabling, and handling promise rejections is pretty boilerplate. This component packages up that behavior.",
-  "directories": {
-    "doc": "doc",
-    "test": "tests"
-  },
   "scripts": {
-    "lint:js": "eslint ./*.js addon addon-test-support app blueprints config lib server test-support tests",
+    "lint:js": "eslint .",
     "start": "ember serve",
     "test": "ember test",
     "test:all": "ember try:each",
     "build": "ember build"
   },
-  "repository": "https://github.com/dockyard/ember-async-button",
   "engines": {
-    "node": "^4.5 || 6.* || >= 7.*"
+    "node": "6.* || 8.* || >= 10.*"
   },
-  "author": "Brian Cardarella",
-  "license": "MIT",
   "devDependencies": {
-    "broccoli-asset-rev": "^2.4.5",
+    "broccoli-asset-rev": "^2.7.0",
     "ember-ajax": "^3.0.0",
-    "ember-cli": "~3.1.4",
+    "ember-cli": "~3.2.0",
     "ember-cli-custom-assertions": "0.0.7",
     "ember-cli-dependency-checker": "^2.0.0",
     "ember-cli-eslint": "^4.2.1",
     "ember-cli-htmlbars-inline-precompile": "^1.0.0",
     "ember-cli-inject-live-reload": "^1.4.1",
-    "ember-cli-qunit": "^4.1.1",
+    "ember-cli-qunit": "^4.3.2",
     "ember-cli-release": "^0.2.9",
     "ember-cli-shims": "^1.2.0",
     "ember-cli-sri": "^2.1.0",
     "ember-cli-uglify": "^2.0.0",
     "ember-disable-prototype-extensions": "^1.1.2",
     "ember-export-application-global": "^2.0.0",
-    "ember-load-initializers": "^1.0.0",
+    "ember-load-initializers": "^1.1.0",
     "ember-maybe-import-regenerator": "^0.1.6",
     "ember-native-dom-event-dispatcher": "^0.6.1",
     "ember-native-dom-helpers": "^0.4.1",
     "ember-resolver": "^4.0.0",
-    "ember-source": "~3.1.0",
+    "ember-source": "~3.2.0",
     "ember-source-channel-url": "^1.0.1",
     "ember-try": "^0.2.23",
     "eslint-plugin-ember": "^5.0.0",
     "eslint-plugin-ember-suave": "^1.0.0",
     "eslint-plugin-node": "^6.0.1",
-    "loader.js": "^4.2.3"
+    "loader.js": "^4.2.3",
+    "qunit-dom": "^0.6.2"
   },
   "keywords": [
     "ember-addon",
     "button",
     "async"
   ],
+  "repository": "https://github.com/dockyard/ember-async-button",
+  "license": "MIT",
+  "author": "Brian Cardarella",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
   "dependencies": {
     "ember-cli-babel": "^6.8.2",
     "ember-cli-htmlbars": "^2.0.3"

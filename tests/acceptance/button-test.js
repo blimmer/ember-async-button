@@ -124,9 +124,9 @@ module('Acceptance | AsyncButton', function(hooks) {
   test('button type is set', async function(assert) {
     await visit('/');
 
-    assert.equal(findAll('#set-type button.async-button[type="submit"]').length, 1);
-    assert.equal(findAll('#set-type button.async-button[type="button"]').length, 1);
-    assert.equal(findAll('#set-type button.async-button[type="reset"]').length, 1);
+    assert.dom('#set-type button.async-button[type="submit"]').exists({ count: 1 });
+    assert.dom('#set-type button.async-button[type="button"]').exists({ count: 1 });
+    assert.dom('#set-type button.async-button[type="reset"]').exists({ count: 1 });
   });
 
   test('button reset', async function(assert) {

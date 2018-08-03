@@ -36,9 +36,9 @@ module('Integration | Component | async button', function(hooks) {
       hbs`{{async-button default=default pending=pending fulfilled=fulfilled action=(action "closurePromise")}}`
     );
     let promise = click('button');
-    assert.equal(find('button').textContent.trim(), 'Saving');
+    assert.dom('button').hasText('Saving');
     await promise;
-    assert.equal(find('button').textContent.trim(), 'Saved');
+    assert.dom('button').hasText('Saved');
   });
 
   test('it responds to a rejected closure promise', async function(assert) {
@@ -63,9 +63,9 @@ module('Integration | Component | async button', function(hooks) {
     );
     let promise = click('button');
 
-    assert.equal(find('button').textContent.trim(), 'Saving');
+    assert.dom('button').hasText('Saving');
     await promise;
-    assert.equal(find('button').textContent.trim(), 'Retry Save');
+    assert.dom('button').hasText('Retry Save');
   });
 
   test('closure actions can use the callback argument', async function(assert) {
@@ -89,9 +89,9 @@ module('Integration | Component | async button', function(hooks) {
     await render(hbs`{{async-button default=default pending=pending action=(action "closurePromise")}}`);
     let promise = click('button');
 
-    assert.equal(find('button').textContent.trim(), 'Saving');
+    assert.dom('button').hasText('Saving');
     await promise;
-    assert.equal(find('button').textContent.trim(), 'Save');
+    assert.dom('button').hasText('Save');
   });
 
   test('closure actions receive positional params', async function(assert) {
@@ -108,8 +108,8 @@ module('Integration | Component | async button', function(hooks) {
 
   test('It can receive a tagName', async function(assert) {
     await render(hbs`{{async-button tagName="a"}}`);
-    assert.notOk(find('button'), 'There is no button');
-    assert.ok(find('a'), 'There is anchor instead');
+    assert.dom('button').doesNotExist('There is no button');
+    assert.dom('a').exists('There is anchor instead');
   });
 
   test('If the tagName is not an `a`, it has no `href`', async function(assert) {

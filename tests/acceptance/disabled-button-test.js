@@ -22,20 +22,20 @@ module('Acceptance | Disabled AsyncButton', function(hooks) {
   test('button works with custom disabled conditional', async function(assert) {
     await visit('/disabled');
 
-    assert.equal(find('#custom-disabled button').disabled, true);
+    assert.dom('#custom-disabled button').isDisabled();
     assert.contains('#custom-disabled button', 'Save');
     await fillIn('#custom-disabled input', 'x');
-    assert.equal(find('#custom-disabled button').disabled, false);
+    assert.dom('#custom-disabled button').isNotDisabled();
     assert.contains('#custom-disabled button', 'Save');
 
     await click('#custom-disabled button');
     assert.contains('#custom-disabled button', 'Saving...');
-    assert.equal(find('#custom-disabled button').disabled, true);
+    assert.dom('#custom-disabled button').isDisabled();
     run(() => set(DisabledController, 'promise', resolve()));
     assert.contains('#custom-disabled button', 'Save');
-    assert.equal(find('#custom-disabled button').disabled, false);
+    assert.dom('#custom-disabled button').isNotDisabled();
     await fillIn('#custom-disabled input', '');
     assert.contains('#custom-disabled button', 'Save');
-    assert.equal(find('#custom-disabled button').disabled, true);
+    assert.dom('#custom-disabled button').isDisabled();
   });
 });

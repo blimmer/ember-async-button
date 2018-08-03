@@ -11,7 +11,7 @@ export default Mixin.create({
           later(() => {
             reject();
           }, get(this, 'timeoutLength'));
-        } else {
+        } else if (!this.autoResolve) {
           later(() => {
             set(this, 'actionArgument1', passedArgument1);
             set(this, 'actionArgument2', passedArgument2);

@@ -1,14 +1,7 @@
-import { click, visit } from '@ember/test-helpers';
+import { click, find, visit, waitUntil } from '@ember/test-helpers';
 import { resolve, reject, Promise } from 'rsvp';
 import { set } from '@ember/object';
 import { run } from '@ember/runloop';
-import {
-  find,
-  click,
-  findAll,
-  visit,
-  waitUntil
-} from 'ember-native-dom-helpers';
 import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 
@@ -18,7 +11,7 @@ module('Acceptance | AsyncButton', function(hooks) {
   setupApplicationTest(hooks);
 
   hooks.beforeEach(function() {
-    AppController = this.application.__container__.lookup('controller:application');
+    AppController = this.owner.lookup('controller:application');
   });
 
   hooks.afterEach(function() {
@@ -28,20 +21,21 @@ module('Acceptance | AsyncButton', function(hooks) {
   test('button resolves', async function(assert) {
     await visit('/');
 
-    assert.contains('button.async-button', 'Save');
-    let promise = click('button.async-button');
-    assert.contains('button.async-button', 'Saving...');
+    assert.dom('#first-button').hasText('Save');
+    let promise = click('#first-button');
+    await waitUntil(() => find('#first-button').textContent.indexOf('Saving...') > -1)
+    assert.dom('#first-button').hasText('Saving...');
     await promise;
-    assert.contains('button.async-button', 'Saved!');
+    assert.dom('#first-button').hasText('Saved!');
   });
 
   test('button bound to controller promise resolves', async function(assert) {
     await visit('/');
 
-    assert.contains('#promise-bound button.async-button', 'Save');
+    assert.dom('#promise-bound button.async-button').hasText('Save');
     run(() => set(AppController, 'promise', resolve()));
     await waitUntil(() => find('#promise-bound button.async-button').textContent.indexOf('Saved!') > -1)
-    assert.contains('#promise-bound button.async-button', 'Saved!');
+    assert.dom('#promise-bound button.async-button').hasText('Saved!');
   });
 
   test('parameters passed to the helper are passed to the action', async function(assert) {
@@ -75,10 +69,10 @@ module('Acceptance | AsyncButton', function(hooks) {
   test('button bound to controller promise fails', async function(assert) {
     await visit('/');
 
-    assert.contains('#promise-bound button.async-button', 'Save');
+    assert.dom('#promise-bound button.async-button').hasText('Save');
     run(() => set(AppController, 'promise', reject()));
     await waitUntil(() => find('#promise-bound button.async-button').textContent.indexOf('Fail!') > -1)
-    assert.contains('#promise-bound button.async-button', 'Fail!');
+    assert.dom('#promise-bound button.async-button').hasText('Fail!');
   });
 
   test('app should not crash due to a race condition on resolve', async function(assert) {
@@ -112,13 +106,13 @@ module('Acceptance | AsyncButton', function(hooks) {
   test('button fails', async function(assert) {
     await visit('/');
 
-    assert.contains('button.async-button', 'Save');
+    assert.dom('button.async-button').hasText('Save');
     await click('.rejectPromise');
-    await click('button.async-button');
+    click('button.async-button');
     await waitUntil(() => find('button.async-button').textContent.indexOf('Saving...') > -1);
-    assert.contains('button.async-button', 'Saving...');
+    assert.dom('button.async-button').hasText('Saving...');
     await waitUntil(() => find('button.async-button').textContent.indexOf('Fail!') > -1);
-    assert.contains('button.async-button', 'Fail!');
+    assert.dom('button.async-button').hasText('Fail!');
   });
 
   test('button type is set', async function(assert) {
@@ -133,18 +127,18 @@ module('Acceptance | AsyncButton', function(hooks) {
     await visit('/');
     await click('button.async-button');
 
-    assert.contains('button.async-button', 'Saved!');
+    assert.dom('button.async-button').hasText('Saved!');
     await click('.dirtyState');
-    assert.contains('button.async-button', 'Save');
+    assert.dom('button.async-button').hasText('Save');
     await click('.dirtyState');
     await click('button.async-button');
-    assert.contains('button.async-button', 'Saved!');
+    assert.dom('button.async-button').hasText('Saved!');
   });
 
   test('Can render a template instead', async function(assert) {
     await visit('/');
 
-    assert.contains('button.template', 'This is the template content.');
+    assert.dom('button.template').hasText('This is the template content.');
   });
 
   test('tabindex is respected', async function(assert) {
@@ -157,22 +151,22 @@ module('Acceptance | AsyncButton', function(hooks) {
     let buttonSelector = '#accepts-block button';
     await visit('/');
 
-    assert.contains(buttonSelector, 'Save');
+    assert.dom(buttonSelector).hasText('Save');
     await click(buttonSelector);
-    assert.contains(buttonSelector, 'Saved!');
+    assert.dom(buttonSelector).hasText('Saved!');
   });
 
   test('Yield state', async function(assert) {
     await visit('/');
 
-    assert.contains('#state-yield button.async-button', 'default');
+    assert.dom('#state-yield button.async-button').hasText('default');
     await click('#state-yield button.async-button');
-    assert.contains('#state-yield button.async-button', 'pending');
+    assert.dom('#state-yield button.async-button').hasText('pending');
     run(()=> set(AppController, 'promise', reject()));
     await waitUntil(() => find('#state-yield button.async-button').textContent.indexOf('rejected') > -1);
-    assert.contains('#state-yield button.async-button', 'rejected');
+    assert.dom('#state-yield button.async-button').hasText('rejected');
     run(()=> set(AppController, 'promise', resolve()));
     await waitUntil(() => find('#state-yield button.async-button').textContent.indexOf('fulfilled') > -1);
-    assert.contains('#state-yield button.async-button', 'fulfilled');
+    assert.dom('#state-yield button.async-button').hasText('fulfilled');
   });
 });

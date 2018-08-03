@@ -1,5 +1,4 @@
 import { alias } from '@ember/object/computed';
-import { deprecate } from '@ember/application/deprecations';
 import {
   getWithDefault,
   observer,
@@ -26,12 +25,6 @@ const ButtonComponent = Component.extend(positionalParamsMixin, {
 
   type: 'submit',
 
-  init() {
-    this._super(...arguments);
-    let deprecationMessage = '`ember-async-button` has been deprecated and will no longer be supported.';
-    deprecate(deprecationMessage, false, { id: 'ember-async-button.deprecate-addon', until: 'forever' });
-  },
-
   disabled: computed('textState', 'disableWhen', function() {
     let textState = get(this, 'textState');
     let disableWhen = get(this, 'disableWhen');
@@ -44,18 +37,8 @@ const ButtonComponent = Component.extend(positionalParamsMixin, {
       set(this, 'promise', promise);
     };
 
-    if (typeof this.attrs.action === 'function') {
-      let deprecatingCallbackHandler = function(promise) {
-        deprecate(`When using closure style actions with ember-async-button,
-please return the promise instead of using the callback argument.
-The callback for closure actions will be removed in future versions.`,
-          false,
-          { id: 'ember-async-button.action-callback', until: '0.8.0' });
-
-        callbackHandler(promise);
-      };
-
-      let promise = this.attrs.action(deprecatingCallbackHandler, ...params);
+    if (typeof this.action === 'function') {
+      let promise = this.action(callbackHandler, ...params);
 
       if (promise && typeof promise.then === 'function') {
         callbackHandler(promise);
@@ -63,7 +46,7 @@ The callback for closure actions will be removed in future versions.`,
     } else {
       let actionArguments = ['action', callbackHandler, ...params];
 
-      this.sendAction(...actionArguments);
+      this.sendAction(...actionArguments); // eslint-disable-line ember/closure-actions
     }
 
     set(this, 'textState', 'pending');
@@ -111,7 +94,6 @@ The callback for closure actions will be removed in future versions.`,
 
   setUnknownProperty(key, value) {
     if (key === 'resolved') {
-      deprecate(`The 'resolved' property is deprecated. Please use 'fulfilled'`, false);
       key = 'fulfilled';
     }
 
